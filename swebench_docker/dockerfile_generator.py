@@ -18,7 +18,7 @@ class DockerfileGenerator:
     def __init__(
         self,
         swe_bench_tasks: str,
-        namespace: str = "aorwall",
+        namespace: str = "renning22",
         docker_dir: str = "docker",
         predictions_path: str = None,
     ):

@@ -8,7 +8,8 @@ if __name__ == "__main__":
         "--swe_bench_tasks",
         type=str,
         help="Path to candidate task instances file",
-        required=True,
+        required=False,
+        default="princeton-nlp/SWE-bench_Lite",
     )
     parser.add_argument(
         "--namespace",
