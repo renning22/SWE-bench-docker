@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Check for minimum arguments
-if [ "$#" -lt 2 ]; then
-    echo "Usage: $0 <docker_namespace> <testbed_directory>"
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 <testbed_directory>"
     exit 1
 fi
 
-docker_namespace=$1
-testbed_directory=$2
+docker_namespace=renning22
+testbed_directory=$1
 
 base_dir=$(dirname "$testbed_directory")
 version=$(basename "$testbed_directory")

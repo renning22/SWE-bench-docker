@@ -115,7 +115,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--instance_id", type=str, help="Instance ID", required=True)
     parser.add_argument("--swe_bench_tasks", type=str, help="Path to dataset file or HF datasets name", required=False, default="princeton-nlp/SWE-bench_Lite")
-    parser.add_argument("--namespace", type=str, help="Docker repository namespace", required=False, default="aorwall")
+    parser.add_argument("--namespace", type=str, help="Docker repository namespace", required=False, default="renning22")
     parser.add_argument("--predictions_path", type=str, help="Path to predictions file (must be .json)", required=False)
     args = parser.parse_args()
     asyncio.run(main(**vars(args)))

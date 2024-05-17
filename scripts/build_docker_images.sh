@@ -2,14 +2,14 @@
 set -e
 
 # Check for minimum arguments
-if [ "$#" -lt 2 ]; then
-    echo "Usage: $0 <root_directory> <docker_namespace> [repo_directory]"
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 <root_directory> [repo_directory]"
     exit 1
 fi
 
-docker_namespace=$2
+docker_namespace=renning22
 root_directory=$1
-repo=${3:-""}
+repo=${2:-""}
 
 base_image="${docker_namespace}/swe-bench"
 

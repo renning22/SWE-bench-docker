@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Usage check
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <root_directory> <docker_namespace>"
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <root_directory>"
     exit 1
 fi
 
 root_directory=$1
-docker_namespace=$2
+docker_namespace=renning22
 base_image="${docker_namespace}/swe-bench"
 
 push_docker_images() {

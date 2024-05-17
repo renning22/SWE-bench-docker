@@ -15,7 +15,7 @@ if __name__ == "__main__":
         type=str,
         help="Docker repository namespace",
         required=False,
-        default="aorwall",
+        default="renning22",
     )
     parser.add_argument(
         "--predictions_path",

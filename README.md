@@ -71,7 +71,7 @@ python run_evaluation.py
 It might be worth pulling all Images before running the script to achieve more consistent timing in the evaluation. 
 
 ```bash
-scripts/pull_docker_images.sh [Dockerfiles directory] [Namespace]
+scripts/pull_docker_images.sh [Dockerfiles directory]
 ```
 
 ## Build Docker images
@@ -90,14 +90,14 @@ python run_dockerfile_generator.py
 This script builds Docker images from all Dockerfiles.
 
 ```bash
-scripts/build_docker_images.sh [Dockerfiles directory] [Namespace]
+scripts/build_docker_images.sh [Dockerfiles directory]
 ```
 
 ### Push Docker images
 This script builds Docker images from all Dockerfiles.
 
 ```bash
-scripts/push_docker_images.sh [Dockerfiles directory] [Namespace]
+scripts/push_docker_images.sh [Dockerfiles directory]
 ```
 
 ## Troubleshooting
@@ -116,5 +116,5 @@ python run_single_instance.py
 ### Build single Docker image
 
 ```bash
-scripts/build_docker_images.sh [Namespace] [Testbed directory]
+scripts/build_docker_images.sh [Testbed directory]
 ```
