@@ -11,7 +11,7 @@ COPY new_docker/matplotlib__matplotlib/3.3/requirements.txt .
 
 RUN pip install -r requirements.txt
 
-RUN pip install pandas==0.24.2
+# RUN pip install pandas==0.24.2
 
 RUN python -m pip install -e .
 

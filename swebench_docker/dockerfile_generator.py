@@ -132,7 +132,7 @@ class DockerfileGenerator:
     ):
         repo_name = _repo_name(repo)
 
-        base_image = f"{self.namespace}/{self.image_prefix}-conda:bookworm-slim"
+        base_image = f"{self.namespace}/{self.image_prefix}-base:bookworm-slim"
 
         dockerfile_content = self.conda_repository_template.render(
             base_image=base_image,
