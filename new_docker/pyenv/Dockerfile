@@ -5,6 +5,7 @@ ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH"
 
 RUN apt-get update --quiet && \
     apt-get install --yes --no-install-recommends \
+        procps \
         build-essential \
         bzip2 \
         ca-certificates \
