@@ -1,4 +1,7 @@
 all:
+	docker build -t renning22/swe-bench-base:bookworm-slim -f new_docker/Dockerfile .
+	docker build -t renning22/swe-bench-pyenv:bookworm-slim -f new_docker/pyenv/Dockerfile .
+	docker build -t renning22/swe-bench-pyenvs:bookworm-slim -f new_docker/pyenv/Dockerfile-pyenvs .
 	docker build -t renning22/swe-bench-sqlfluff_sqlfluff:bookworm-slim -f new_docker/sqlfluff__sqlfluff/Dockerfile .
 	docker build -t renning22/swe-bench-sqlfluff_sqlfluff-testbed:0.6 -f new_docker/sqlfluff__sqlfluff/0.6/Dockerfile .
 	docker build -t renning22/swe-bench-sqlfluff_sqlfluff-testbed:0.8 -f new_docker/sqlfluff__sqlfluff/0.8/Dockerfile .
@@ -124,6 +127,9 @@ all:
 
 
 push:
+	docker push renning22/swe-bench-base:bookworm-slim
+	docker push renning22/swe-bench-pyenv:bookworm-slim
+	docker push renning22/swe-bench-pyenvs:bookworm-slim
 	docker push renning22/swe-bench-sqlfluff_sqlfluff:bookworm-slim
 	docker push renning22/swe-bench-sqlfluff_sqlfluff-testbed:0.6
 	docker push renning22/swe-bench-sqlfluff_sqlfluff-testbed:0.8
