@@ -4,6 +4,11 @@ FROM renning22/swe-bench-astropy_astropy:bookworm-slim
 
 RUN git -c advice.detachedHead=false checkout 5f74eacbcc7fff707a44d8eb58adaa514cb7dcb5
 
+### Hot patch "pyproject.toml" to fix breakage on using latest setuptools.
+RUN sed -i 's/requires = \["setuptools",/requires = \["setuptools<50",/g' pyproject.toml
+###
+
+
 RUN conda create -n astropy__astropy__5.1 python=3.9  -y
 
 SHELL ["conda", "run", "-n", "astropy__astropy__5.1", "/bin/bash", "-c"]
