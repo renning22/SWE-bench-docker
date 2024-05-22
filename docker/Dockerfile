@@ -4,7 +4,7 @@ ARG TARGETARCH
 
 # Install third party tools
 RUN apt-get update && \
-    apt-get install -y bash gcc git jq wget g++ make libffi-dev build-essential python3.11 && \
+    apt-get install -y procps bash gcc git jq wget g++ make libffi-dev build-essential python3.11 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
