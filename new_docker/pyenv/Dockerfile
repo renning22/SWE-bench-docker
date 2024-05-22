@@ -41,6 +41,6 @@ WORKDIR /opt
 RUN mkdir /opt/logs
 
 COPY swebench_docker swebench_docker
-COPY docker/pyenv/entrypoint.sh .
+COPY new_docker/pyenv/entrypoint.sh .
 
 ENTRYPOINT ["/opt/entrypoint.sh"]

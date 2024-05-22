@@ -21,6 +21,6 @@ ENV TESTBED_NAME=astropy__astropy__5.2
 WORKDIR /home/swe-bench
 
 COPY swebench_docker swebench_docker
-COPY docker/entrypoint.sh .
+COPY new_docker/entrypoint.sh .
 
 ENTRYPOINT ["./entrypoint.sh"]

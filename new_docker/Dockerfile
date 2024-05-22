@@ -33,6 +33,6 @@ RUN conda --version \
     && conda config --append channels conda-forge
 
 COPY swebench_docker swebench_docker
-COPY docker/entrypoint.sh .
+COPY new_docker/entrypoint.sh .
 
 ENTRYPOINT ["./entrypoint.sh"]

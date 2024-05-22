@@ -24,6 +24,6 @@ ENV TESTBED_NAME=pydata__xarray__0.12
 WORKDIR /home/swe-bench
 
 COPY swebench_docker swebench_docker
-COPY docker/entrypoint.sh .
+COPY new_docker/entrypoint.sh .
 
 ENTRYPOINT ["./entrypoint.sh"]
