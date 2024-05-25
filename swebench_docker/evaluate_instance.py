@@ -81,14 +81,23 @@ if __name__ == "__main__":
 
     assert repo_dir, "REPO_DIR environment variable is not set"
 
-    task_instance = json.loads(base64.b64decode(os.getenv('INSTANCE')).decode('utf-8'))
+    task_instance = None
+    try:
+        task_instance = json.loads(base64.b64decode(os.getenv('INSTANCE', '')).decode('utf-8'))
+    except:
+        pass
+    if task_instance is None:
+        with open(os.getenv('INSTANCE', ''), 'r') as f:
+            task_instance = json.load(f)
+
+    assert task_instance is not None, "Cannot read INSTANCE"
 
     main(
         task_instance=task_instance,
-        testbed_name=os.getenv('TESTBED_NAME'),
+        testbed_name=os.getenv('TESTBED_NAME', ''),
         repo_dir=repo_dir,
-        log_dir=os.getenv('LOG_DIR'),
-        timeout=int(os.getenv('TIMEOUT')) if os.getenv('TIMEOUT') is not None else None,
-        log_suffix=os.getenv('LOG_SUFFIX'),
+        log_dir=os.getenv('LOG_DIR', ''),
+        timeout=int(os.getenv('TIMEOUT', '')) if os.getenv('TIMEOUT') is not None else None,
+        log_suffix=os.getenv('LOG_SUFFIX', ''),
         image_type=os.getenv('IMAGE_TYPE', 'conda')
     )
