@@ -33,6 +33,12 @@ all:
 	docker build -t renning22/swe-bench-django_django-testbed:4.2 -f new_docker/django__django/4.2/Dockerfile .
 	docker build -t renning22/swe-bench-django_django-testbed:3.1 -f new_docker/django__django/3.1/Dockerfile .
 	docker build -t renning22/swe-bench-django_django-testbed:3.2 -f new_docker/django__django/3.2/Dockerfile .
+	docker build -t renning22/swe-bench-django_django-testbed:1.9 -f new_docker/django__django/1.9/Dockerfile .
+	docker build -t renning22/swe-bench-django_django-testbed:1.10 -f new_docker/django__django/1.10/Dockerfile .
+	docker build -t renning22/swe-bench-django_django-testbed:1.11 -f new_docker/django__django/1.11/Dockerfile .
+	docker build -t renning22/swe-bench-django_django-testbed:2.0 -f new_docker/django__django/2.0/Dockerfile .
+	docker build -t renning22/swe-bench-django_django-testbed:2.1 -f new_docker/django__django/2.1/Dockerfile .
+	docker build -t renning22/swe-bench-django_django-testbed:2.2 -f new_docker/django__django/2.2/Dockerfile .
 	docker build -t renning22/swe-bench-sphinx-doc_sphinx:bookworm-slim -f new_docker/sphinx-doc__sphinx/Dockerfile .
 	docker build -t renning22/swe-bench-sphinx-doc_sphinx-testbed:3.5 -f new_docker/sphinx-doc__sphinx/3.5/Dockerfile .
 	docker build -t renning22/swe-bench-sphinx-doc_sphinx-testbed:3.3 -f new_docker/sphinx-doc__sphinx/3.3/Dockerfile .
@@ -161,6 +167,12 @@ push:
 	docker push renning22/swe-bench-django_django-testbed:4.2
 	docker push renning22/swe-bench-django_django-testbed:3.1
 	docker push renning22/swe-bench-django_django-testbed:3.2
+	docker push renning22/swe-bench-django_django-testbed:1.9
+	docker push renning22/swe-bench-django_django-testbed:1.10
+	docker push renning22/swe-bench-django_django-testbed:1.11
+	docker push renning22/swe-bench-django_django-testbed:2.0
+	docker push renning22/swe-bench-django_django-testbed:2.1
+	docker push renning22/swe-bench-django_django-testbed:2.2
 	docker push renning22/swe-bench-sphinx-doc_sphinx:bookworm-slim
 	docker push renning22/swe-bench-sphinx-doc_sphinx-testbed:3.5
 	docker push renning22/swe-bench-sphinx-doc_sphinx-testbed:3.3
