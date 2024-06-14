@@ -1,6 +1,7 @@
 import logging
 import os
 from typing import List
+import shutil
 
 from jinja2 import FileSystemLoader, Environment
 from swebench import get_eval_refs, get_instances
@@ -18,16 +19,21 @@ class DockerfileGenerator:
     def __init__(
         self,
         swe_bench_tasks: str,
-        namespace: str = "renning22",
-        docker_dir: str = "docker",
+        artifact_registry_location: str,
+        gcp_project_id: str,
+        artifact_registry_repo: str,
+        subproject_registry_name: str,
+        docker_dir: str,
         predictions_path: str = None,
     ):
-        self.namespace = namespace
+        self.artifact_registry_location = artifact_registry_location
+        self.namespace = gcp_project_id
+        self.registry_name = artifact_registry_repo
+        self.subproject_registry_name = subproject_registry_name
         self.docker_dir = docker_dir
         self.task_instances = list(get_eval_refs(swe_bench_tasks).values())
 
         self.dockerfiles_to_build = []
-        self.image_prefix = "swe-bench"
 
         env = Environment(loader=FileSystemLoader("templates"))
         self.conda_testbed_template = env.get_template(f"Dockerfile.conda_testbed")
@@ -46,7 +52,19 @@ class DockerfileGenerator:
     def generate(self):
         testbeds = set()
         task_instances_grouped = self.group_task_instances(self.task_instances)
-
+        
+        if not os.path.exists(self.docker_dir):
+            os.makedirs(self.docker_dir)
+        
+        # Copy conda Dockerfile
+        shutil.copy("templates/Dockerfile", self.docker_dir)
+        # Copy conda Dockerfile
+        shutil.copy("templates/entrypoint.sh", self.docker_dir)
+        
+        # Copy pyenv dir
+        target_dir_path = os.path.join(self.docker_dir, os.path.basename("pyenv"))
+        shutil.copytree("templates/pyenv", target_dir_path)
+        
         for repo, map_version_to_instances in task_instances_grouped.items():
             logger.info(f"Repo {repo}: {len(map_version_to_instances)} versions")
 
@@ -102,9 +120,10 @@ class DockerfileGenerator:
                         )
 
         self.create_makefile()
-
+        results = []
         for dockerfile, image_name in self.dockerfiles_to_build:
-            print(f"docker build -t {image_name} -f {dockerfile} .")
+            results.append(f"docker build -t {image_name} -f {dockerfile} .")
+        return results
 
     def create_makefile(self):
         with open(f"Makefile", "w") as f:
@@ -132,7 +151,7 @@ class DockerfileGenerator:
     ):
         repo_name = _repo_name(repo)
 
-        base_image = f"{self.namespace}/{self.image_prefix}-base:bookworm-slim"
+        base_image = f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-base:bookworm-slim"
 
         dockerfile_content = self.conda_repository_template.render(
             base_image=base_image,
@@ -152,7 +171,7 @@ class DockerfileGenerator:
 
         repo_image_name = repo.replace("/", "_")
 
-        self.dockerfiles_to_build.append((output_file, f"{self.namespace}/{self.image_prefix}-{repo_image_name}:bookworm-slim"))
+        self.dockerfiles_to_build.append((output_file, f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-{repo_image_name}:bookworm-slim"))
 
     def generate_pyenv_repository_dockerfile(
             self, repo: str, deb_packages: List[str]
@@ -160,8 +179,8 @@ class DockerfileGenerator:
 
         repo_name = _repo_name(repo)
 
-        base_image = f"{self.namespace}/{self.image_prefix}-pyenv:bookworm-slim"
-        pyenv_image = f"{self.namespace}/swe-bench-pyenvs:bookworm-slim"
+        base_image = f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-pyenv:bookworm-slim"
+        pyenv_image = f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-pyenvs:bookworm-slim"
 
         dockerfile_content = self.pyenv_repository_template.render(
             base_image=base_image,
@@ -183,7 +202,7 @@ class DockerfileGenerator:
         repo_image_name = repo.replace("/", "_")
 
         self.dockerfiles_to_build.append(
-            (output_file, f"{self.namespace}/{self.image_prefix}-{repo_image_name}:bookworm-slim"))
+            (output_file, f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-{repo_image_name}:bookworm-slim"))
 
     def generate_testbed_dockerfile(
         self,
@@ -275,8 +294,8 @@ class DockerfileGenerator:
 
         repo_name = _repo_name(repo)
 
-        base_image = f"{self.namespace}/{self.image_prefix}-{repo_image_name}:bookworm-slim"
-        pyenv_image = f"{self.namespace}/swe-bench-pyenvs:bookworm-slim"
+        base_image = f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-{repo_image_name}:bookworm-slim"
+        pyenv_image = f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-pyenvs:bookworm-slim"
 
         python_version = specifications["python"]
         if use_conda:
@@ -311,7 +330,7 @@ class DockerfileGenerator:
 
         print(f"Dockerfile generated: {output_file}")
 
-        self.dockerfiles_to_build.append((output_file, f"{self.namespace}/{self.image_prefix}-{repo_image_name}-testbed:{version}"))
+        self.dockerfiles_to_build.append((output_file, f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-{repo_image_name}-testbed:{version}"))
 
     def generate_instance_dockerfile(
         self,
@@ -328,7 +347,7 @@ class DockerfileGenerator:
         repo_image_name = repo.replace("/", "_")
 
         base_image = (
-            f"{self.namespace}/{self.image_prefix}-{repo_image_name}-testbed:{instance['version']}"
+            f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-{repo_image_name}-testbed:{instance['version']}"
         )
 
         dockerfile_content = self.instance_template.render(
@@ -350,7 +369,7 @@ class DockerfileGenerator:
 
         print(f"Dockerfile generated: {output_file}")
 
-        self.dockerfiles_to_build.append((output_file, f"{self.namespace}/{self.image_prefix}-{repo_image_name}-instance:{instance['instance_id']}"))
+        self.dockerfiles_to_build.append((output_file, f"{self.artifact_registry_location}-docker.pkg.dev/{self.namespace}/{self.registry_name}/{self.subproject_registry_name}-{repo_image_name}-instance:{instance['instance_id']}"))
 
 
 def _repo_name(repo: str) -> str:

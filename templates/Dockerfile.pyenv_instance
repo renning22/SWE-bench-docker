@@ -2,10 +2,10 @@
 
 FROM {{ base_image }}
 
-WORKDIR /opt/{{ repo_name }}
+WORKDIR /workspace/{{ repo_name }}
 
 RUN git -c advice.detachedHead=false checkout {{ base_commit }}
 
 RUN {{ install_cmd }}
 
-WORKDIR /opt
+WORKDIR /workspace

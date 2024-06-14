@@ -7,11 +7,13 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
-docker_namespace=renning22
 root_directory=$1
 repo=${2:-""}
 
-base_image="${docker_namespace}/swe-bench"
+gcp_project_id=sudocode-389022
+artifact_registry_location=us-west1
+artifact_registry_repo=environments
+base_image="${artifact_registry_location}-docker.pkg.dev/${gcp_project_id}/${artifact_registry_repo}/swe-bench"
 
 echo "Building base Docker images..."
 docker build -t "${base_image}-base:bookworm-slim" -f "$root_directory/Dockerfile" .

@@ -9,13 +9,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 {% endif %}
 
-COPY --from={{ pyenv_image }} /opt/pyenv/versions/{{ python_version }} /opt/pyenv/versions/{{ python_version }}
+COPY --from={{ pyenv_image }} /workspace/pyenv/versions/{{ python_version }} /workspace/pyenv/versions/{{ python_version }}
 
 RUN pyenv rehash && \
     pyenv global {{ python_version }} && \
     pyenv versions
 
-WORKDIR /opt/{{ repo_name }}
+WORKDIR /workspace/{{ repo_name }}
 
 RUN git -c advice.detachedHead=false checkout {{ environment_setup_commit }}
 
@@ -38,7 +38,7 @@ RUN git checkout {{ environment_setup_commit }} .
 ENV TESTBED_NAME={{ testbed }}
 ENV IMAGE_TYPE=pyenv
 
-WORKDIR /opt
+WORKDIR /workspace
 
 COPY swebench_docker swebench_docker
 COPY docker/pyenv/entrypoint.sh .

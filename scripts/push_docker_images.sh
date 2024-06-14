@@ -7,8 +7,10 @@ if [ "$#" -ne 1 ]; then
 fi
 
 root_directory=$1
-docker_namespace=renning22
-base_image="${docker_namespace}/swe-bench"
+gcp_project_id=sudocode-389022
+artifact_registry_location=us-west1
+artifact_registry_repo=environments
+base_image="${artifact_registry_location}-docker.pkg.dev/${gcp_project_id}/${artifact_registry_repo}/swe-bench"
 
 push_docker_images() {
     for dir in $root_directory/*/*; do
@@ -20,7 +22,8 @@ push_docker_images() {
                 tag_base="${base_dir#$root_directory/}"
                 tag_base="$(echo $tag_base | sed 's/__*/_/g')"
                 image_name="$base_image-${tag_base}-testbed:$version"
-                echo "Pushing Docker image: $image_name"
+                echo "Building and pushing Docker image: $image_name"
+                docker build -t "$image_name" "$dir"
                 docker push "$image_name"
             fi
         fi

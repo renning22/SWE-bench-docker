@@ -2,7 +2,7 @@
 
 FROM {{ base_image }}
 
-COPY --from={{ pyenv_image }} /opt/pyenv/versions/3.11.9 /opt/pyenv/versions/3.11.9
+COPY --from={{ pyenv_image }} /workspace/pyenv/versions/3.11.9 /workspace/pyenv/versions/3.11.9
 
 {% if deb_packages %}
 RUN apt-get update && \
@@ -11,7 +11,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 {% endif %}
 
-WORKDIR /opt
+WORKDIR /workspace
 
 RUN git clone https://github.com/swe-bench/{{ repo_name }}.git
-ENV REPO_DIR=/opt/{{ repo_name }}
+ENV REPO_DIR=/workspace/{{ repo_name }}

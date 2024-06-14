@@ -30,7 +30,7 @@ RUN git checkout {{ environment_setup_commit }} .
 ENV TESTBED_NAME={{ testbed }}
 ENV IMAGE_TYPE=conda
 
-WORKDIR /home/swe-bench
+WORKDIR /workspace
 
 COPY swebench_docker swebench_docker
 
